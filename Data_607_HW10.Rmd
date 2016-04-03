@@ -1,0 +1,41 @@
+---
+title: "Homework 10"
+author: "Jeff Nieman"
+date: "April 3, 2016"
+output: html_document
+  
+
+---
+
+##Assignment Approach
+This homework focuses on pulling data from a New York Times API and converting from the JSON code into an R data base.  First I needed to apply for a key.  I then decided to focus on the geographical site pulling a list of twenty populated German cities.
+
+```{r, warning = FALSE, message = FALSE}
+library(RJSONIO)
+library(RCurl)
+q2 <- getURL("http://api.nytimes.com/svc/semantic/v2/geocodes/query.json?feature_class=P&country_code=DE&feature_class=P&api-key=964b66751b69f8042571892d7a0670bd:10:74813960")
+head(q2,3)
+```
+
+##Parsing and putting data into R data frame
+I used the "fromJSON"" function, then placed the data into a data frame using "sappy".
+
+```{r}
+q3 <- fromJSON(q2)
+head(q3)
+q4 <- q3$`results`
+head(q4,3)
+q5 <- data.frame(t(sapply(q4,c)))
+head(q5,3)
+```
+
+#Improving the data frame
+I cleaned up the data frame for usability by keeping only the most useful columns and renaming them for readability.
+
+```{r}
+q6 <- subset(q5[,c(5:7,9,11,16)])
+colnames(q6) <-c("City", "Latitude", "Longitude", "Population", "Country", "State")
+q6
+```
+
+
